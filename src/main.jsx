@@ -9,6 +9,7 @@ import "./styles/Cards.css";
 import "./styles/Home.css";
 import "./styles/Recording.css";
 import "./styles/SaveRecording.css";
+import "./styles/myRecordings.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     
