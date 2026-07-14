@@ -1,0 +1,24 @@
+:root{
+
+    --primary-color:#6C63FF;
+    --primary-hover:#564de0;
+
+    --success-color:#22c55e;
+    --danger-color:#ef4444;
+
+    --background-start:#eef2ff;
+    --background-end:#f8f5ff;
+
+    --white:#ffffff;
+
+    --text-dark:#222222;
+    --text-light:#666666;
+
+    --border-radius:20px;
+
+    --shadow:
+        0 20px 40px rgba(0,0,0,.12);
+
+    --transition:.3s;
+
+}
