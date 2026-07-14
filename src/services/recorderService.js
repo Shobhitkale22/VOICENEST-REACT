@@ -81,6 +81,16 @@ export function stopRecording() {
             console.log("Blob Size:", audioBlob.size);
             console.log("Blob:", audioBlob);
 
+            const fileReader = new FileReader();
+
+fileReader.onload = function () {
+
+    console.log(fileReader.result);
+
+};
+
+fileReader.readAsDataURL(audioBlob);
+
             // Create URL
             const audioURL = URL.createObjectURL(audioBlob);
 
