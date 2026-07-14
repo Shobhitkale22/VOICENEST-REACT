@@ -1,4 +1,4 @@
-.page-container{
+.home-page{
 
     min-height:100vh;
 
@@ -11,8 +11,6 @@
     align-items:center;
 
     gap:22px;
-
-    padding:30px;
 
 }
 

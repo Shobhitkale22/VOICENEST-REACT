@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import Logo from "../components/common/Logo";
 import Button from "../components/common/Button";
@@ -14,7 +14,18 @@ function SaveRecording() {
 
     const navigate = useNavigate();
 
-    const duration = "00:00";
+    const location = useLocation();
+
+    // Receive data from Recording.jsx
+    const audioBlob = location.state?.audioBlob || null;
+
+const audioURL = audioBlob
+    ? URL.createObjectURL(audioBlob)
+    : "";
+   
+    const audioBlob = location.state?.audioBlob || null;
+
+    const duration = location.state?.duration || "00:00";
 
     function handleNameChange(event) {
 
@@ -24,7 +35,6 @@ function SaveRecording() {
 
     function saveRecording() {
 
-        // Check if recording name is empty
         if (recordingName.trim() === "") {
 
             alert("Please enter a recording name.");
@@ -33,7 +43,6 @@ function SaveRecording() {
 
         }
 
-        // Create recording object
         const recording = {
 
             id: Date.now(),
@@ -42,18 +51,19 @@ function SaveRecording() {
 
             duration: duration,
 
-            createdAt: new Date().toLocaleString()
+            createdAt: new Date().toLocaleString(),
+
+            audioURL: audioURL,
+
+            audioBlob: audioBlob
 
         };
 
-        // Get existing recordings from localStorage
         const recordings =
             JSON.parse(localStorage.getItem("recordings")) || [];
 
-        // Add new recording
         recordings.push(recording);
 
-        // Save updated recordings
         localStorage.setItem(
             "recordings",
             JSON.stringify(recordings)
@@ -61,7 +71,6 @@ function SaveRecording() {
 
         alert("Recording Saved Successfully!");
 
-        // Navigate to My Recordings page
         navigate("/recordings");
 
     }
@@ -73,8 +82,6 @@ function SaveRecording() {
         );
 
         if (confirmDiscard) {
-
-            alert("Recording Discarded!");
 
             navigate("/");
 
@@ -93,24 +100,37 @@ function SaveRecording() {
             </h2>
 
             <AudioPreviewCard
+
                 duration={duration}
+
+                audioURL={audioURL}
+
             />
 
             <RecordingNameCard
+
                 value={recordingName}
+
                 onChange={handleNameChange}
+
             />
 
             <EncryptionCard />
 
             <Button
+
                 text="💾 Save Recording"
+
                 onClick={saveRecording}
+
             />
 
             <Button
+
                 text="🗑 Discard Recording"
+
                 onClick={discardRecording}
+
             />
 
         </div>

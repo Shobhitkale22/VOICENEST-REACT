@@ -1,0 +1,51 @@
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+body{
+
+    font-family:Poppins,Arial,sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--background-start),
+            var(--background-end)
+        );
+
+}
+
+a{
+
+    text-decoration:none;
+
+}
+
+button{
+
+    font-family:inherit;
+
+}
+
+input{
+
+    font-family:inherit;
+
+}
+.page-container{
+
+    width:100%;
+
+    max-width:520px;
+
+    margin:0 auto;
+
+    padding:30px;
+
+}

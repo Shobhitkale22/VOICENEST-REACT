@@ -1,0 +1,49 @@
+.record-info-card{
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:15px;
+
+    margin:20px 0;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
+
+.record-info-card h2{
+
+    margin-bottom:10px;
+
+}
+
+.record-info-card p{
+
+    margin:8px 0;
+
+    color:#666;
+
+}
+
+.audio-player-card{
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:15px;
+
+    margin-bottom:20px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
+
+.feature-btn{
+
+    width:100%;
+
+    margin-top:15px;
+
+}

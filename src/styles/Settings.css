@@ -1,0 +1,125 @@
+.settings-card{
+
+    width:100%;
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:20px;
+
+    background:#fff;
+
+    padding:20px;
+
+    border-radius:16px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+    margin-bottom:20px;
+
+}
+
+.settings-icon{
+
+    width:55px;
+
+    height:55px;
+
+    border-radius:50%;
+
+    background:#6C63FF;
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:24px;
+
+    flex-shrink:0;
+
+}
+
+.settings-content{
+
+    flex:1;
+
+}
+
+.settings-content h3{
+
+    margin:0 0 10px;
+
+}
+
+.settings-content p{
+
+    margin:6px 0;
+
+    color:#555;
+
+}
+
+.settings-content small{
+
+    color:#888;
+
+}
+
+.settings-button{
+
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    margin-top:15px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+.logout-btn{
+
+    background:#ef4444;
+
+    color:white;
+
+}
+
+.logout-btn:hover{
+
+    background:#dc2626;
+
+}
+
+.home-btn{
+
+    background:#6C63FF;
+
+    color:white;
+
+}
+
+.home-btn:hover{
+
+    background:#574fd6;
+
+}

@@ -10,6 +10,8 @@ import "./styles/Home.css";
 import "./styles/Recording.css";
 import "./styles/SaveRecording.css";
 import "./styles/myRecordings.css";
+import "./styles/Details.css";
+import "./styles/Settings.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     
