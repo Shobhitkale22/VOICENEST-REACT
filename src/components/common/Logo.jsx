@@ -1,3 +1,5 @@
+
+
 import { FaMicrophoneAlt } from "react-icons/fa";
 
 function Logo() {
@@ -17,9 +19,7 @@ function Logo() {
             <p>Record • Save • Secure</p>
 
         </div>
-
-    );
-
+    )
 }
 
 export default Logo;

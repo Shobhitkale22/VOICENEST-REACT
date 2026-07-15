@@ -33,3 +33,23 @@
     color:var(--text-light);
 
 }
+
+.save-page{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.save-title{
+    text-align:center;
+    font-size:28px;
+    color:var(--primary-color);
+    margin-top:10px;
+}
+
+.save-subtitle{
+    text-align:center;
+    color:var(--text-light);
+    margin-top:-10px;
+    margin-bottom:15px;
+}

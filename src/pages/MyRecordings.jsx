@@ -7,6 +7,14 @@ import EmptyState from "../components/common/EmptyState";
 import Button from "../components/common/Button";
 import RecordingCard from "../components/recording/RecordingCard";
 
+import {
+
+    getAllRecordings,
+
+    deleteRecording as deleteRecordingFromDB
+
+} from "../services/databaseService";
+
 function MyRecordings() {
 
     const navigate = useNavigate();
@@ -17,17 +25,35 @@ function MyRecordings() {
 
     useEffect(() => {
 
-        const savedRecordings =
-            JSON.parse(localStorage.getItem("recordings")) || [];
-
-        setRecordings(savedRecordings);
+        loadRecordings();
 
     }, []);
 
-    function deleteRecording(id) {
+    async function loadRecordings() {
+
+        try {
+
+            const savedRecordings =
+                await getAllRecordings();
+
+            setRecordings(savedRecordings);
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+        }
+
+    }
+
+    async function deleteRecording(id) {
 
         const confirmDelete = window.confirm(
+
             "Are you sure you want to delete this recording?"
+
         );
 
         if (!confirmDelete) {
@@ -36,29 +62,29 @@ function MyRecordings() {
 
         }
 
-        const updatedRecordings = recordings.filter(
+        try {
 
-            (recording) => recording.id !== id
+            await deleteRecordingFromDB(id);
 
-        );
+            loadRecordings();
 
-        setRecordings(updatedRecordings);
+        }
 
-        localStorage.setItem(
+        catch (error) {
 
-            "recordings",
+            console.error(error);
 
-            JSON.stringify(updatedRecordings)
-
-        );
+        }
 
     }
 
-    const filteredRecordings = recordings.filter((recording) =>
+    const filteredRecordings = recordings.filter(
 
-        recording.title
-            .toLowerCase()
-            .includes(search.toLowerCase())
+        (recording) =>
+
+            (recording.title || "")
+                .toLowerCase()
+                .includes(search.toLowerCase())
 
     );
 
@@ -114,7 +140,13 @@ function MyRecordings() {
 
                                 id={recording.id}
 
-                                title={recording.title}
+                                title={
+
+                                    recording.title ||
+
+                                    "Untitled Recording"
+
+                                }
 
                                 duration={recording.duration}
 
@@ -136,7 +168,11 @@ function MyRecordings() {
 
                     text="➕ New Recording"
 
-                    onClick={() => navigate("/recording")}
+                    onClick={() =>
+
+                        navigate("/recording")
+
+                    }
 
                 />
 

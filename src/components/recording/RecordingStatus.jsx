@@ -1,14 +1,16 @@
-function RecordingStatus() {
+function RecordingStatus({ status }) {
 
     return (
 
-        <p className="record-status">
+        <div className="recording-status">
 
-            <span className="record-dot"></span>
+            <div className="record-dot"></div>
 
-            Recording...
+            <h2>{status}</h2>
 
-        </p>
+            <p>Your microphone is currently active.</p>
+
+        </div>
 
     );
 

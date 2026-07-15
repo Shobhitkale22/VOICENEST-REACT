@@ -1,5 +1,4 @@
 import Card from "../common/Card";
-import WaveAnimation from "./WaveAnimation";
 
 function TimerCard({ time }) {
 
@@ -7,11 +6,17 @@ function TimerCard({ time }) {
 
         <Card>
 
-            <h2 className="timer-text">
-                {time}
-            </h2>
+            <div className="timer-card">
 
-            <WaveAnimation />
+                <p>Recording Time</p>
+
+                <h1 className="timer">
+
+                    {time}
+
+                </h1>
+
+            </div>
 
         </Card>
 

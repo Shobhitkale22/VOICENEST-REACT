@@ -1,3 +1,4 @@
+import "../styles/recording.css";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -13,6 +14,10 @@ import {
     stopRecording
 } from "../services/recorderService";
 
+import {
+    saveRecording as saveRecordingToDB
+} from "../services/databaseService";
+
 function Recording() {
 
     const navigate = useNavigate();
@@ -23,7 +28,6 @@ function Recording() {
 
     const timerRef = useRef(null);
 
-    // Start recording when page loads
     useEffect(() => {
 
         async function beginRecording() {
@@ -41,6 +45,8 @@ function Recording() {
             }
 
             catch (error) {
+
+                console.error(error);
 
                 alert("Microphone permission denied.");
 
@@ -60,33 +66,62 @@ function Recording() {
 
     }, [navigate]);
 
-    // Format timer
-    const minutes = String(Math.floor(seconds / 60)).padStart(2, "0");
+    const minutes = String(
+        Math.floor(seconds / 60)
+    ).padStart(2, "0");
 
-    const remainingSeconds = String(seconds % 60).padStart(2, "0");
+    const remainingSeconds = String(
+        seconds % 60
+    ).padStart(2, "0");
 
-    const formattedTime = `${minutes}:${remainingSeconds}`;
+    const formattedTime =
+        `${minutes}:${remainingSeconds}`;
 
-    // Stop Recording
     async function handleStopRecording() {
 
         clearInterval(timerRef.current);
 
-        const audio = await stopRecording();
+        try {
 
-        navigate("/save", {
+            const audio = await stopRecording();
 
-            state: {
+            const recordingId = Date.now();
 
-                audioBlob: audio.blob,
+            const recording = {
 
-                audioURL: audio.url,
+                id: recordingId,
 
-                duration: formattedTime
+                title: "",
 
-            }
+                duration: formattedTime,
 
-        });
+                createdAt: new Date().toLocaleString(),
+
+                audioBlob: audio.blob
+
+            };
+
+            await saveRecordingToDB(recording);
+
+            navigate("/save", {
+
+                state: {
+
+                    recordingId: recordingId
+
+                }
+
+            });
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            alert("Unable to save recording.");
+
+        }
 
     }
 
@@ -111,13 +146,13 @@ function Recording() {
             <Button
 
                 text="⏸ Pause Recording"
-
+                disabled
             />
 
             <Button
 
                 text="⏹ Stop Recording"
-
+                variant="danger"
                 onClick={handleStopRecording}
 
             />

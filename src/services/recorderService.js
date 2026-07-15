@@ -2,52 +2,57 @@ let mediaRecorder = null;
 let audioChunks = [];
 let stream = null;
 
-console.log(
-    "audio/webm:",
-    MediaRecorder.isTypeSupported("audio/webm")
-);
-
-console.log(
-    "audio/webm;codecs=opus:",
-    MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
-);
-
-console.log(
-    "audio/ogg;codecs=opus:",
-    MediaRecorder.isTypeSupported("audio/ogg;codecs=opus")
-);
-
-console.log(
-    "audio/mp4:",
-    MediaRecorder.isTypeSupported("audio/mp4")
-);
-
-export async function startRecording(onChunk) {
+export async function startRecording() {
 
     stream = await navigator.mediaDevices.getUserMedia({
         audio: true
     });
 
-    // Force WebM + Opus
-    mediaRecorder = new MediaRecorder(stream, {
-        mimeType: "audio/webm;codecs=opus"
-    });
+    // Let browser choose the best supported MIME type
+    const options = {};
+
+    if (
+        MediaRecorder.isTypeSupported(
+            "audio/webm;codecs=opus"
+        )
+    ) {
+
+        options.mimeType = "audio/webm;codecs=opus";
+
+    }
+
+    else if (
+        MediaRecorder.isTypeSupported(
+            "audio/webm"
+        )
+    ) {
+
+        options.mimeType = "audio/webm";
+
+    }
+
+    mediaRecorder = new MediaRecorder(
+        stream,
+        options
+    );
+
+    console.log(
+        "Recorder MIME Type:",
+        mediaRecorder.mimeType
+    );
 
     audioChunks = [];
 
     mediaRecorder.ondataavailable = (event) => {
 
-        console.log("Chunk Size:", event.data.size);
+        console.log(
+            "Chunk Size:",
+            event.data.size
+        );
 
         if (event.data.size > 0) {
 
             audioChunks.push(event.data);
-
-            if (onChunk) {
-
-                onChunk(event.data);
-
-            }
 
         }
 
@@ -55,11 +60,25 @@ export async function startRecording(onChunk) {
 
     mediaRecorder.onerror = (event) => {
 
-        console.error("Recorder Error:", event);
+        console.error(
+            "Recorder Error:",
+            event
+        );
 
     };
 
-    // Emit data every second
+    mediaRecorder.onstart = () => {
+
+        console.log("Recording Started");
+
+    };
+
+    mediaRecorder.onstop = () => {
+
+        console.log("Recording Stopped");
+
+    };
+
     mediaRecorder.start(1000);
 
 }
@@ -70,55 +89,58 @@ export function stopRecording() {
 
         mediaRecorder.onstop = () => {
 
-            console.log("Chunks:", audioChunks.length);
+            console.log(
+                "Chunks Collected:",
+                audioChunks.length
+            );
 
-            // Create Blob
-            const audioBlob = new Blob(audioChunks, {
-                type: "audio/webm"
-            });
+            // If browser returns empty MIME type,
+            // fall back to audio/webm
+            const mimeType =
+                mediaRecorder.mimeType || "audio/webm";
 
-            console.log("Mime Type:", mediaRecorder.mimeType);
-            console.log("Blob Size:", audioBlob.size);
-            console.log("Blob:", audioBlob);
+            console.log(
+                "Using MIME Type:",
+                mimeType
+            );
 
-            const fileReader = new FileReader();
-
-fileReader.onload = function () {
-
-    console.log(fileReader.result);
-
-};
-
-fileReader.readAsDataURL(audioBlob);
-
-            // Create URL
-            const audioURL = URL.createObjectURL(audioBlob);
-
-            console.log("Blob URL:", audioURL);
-
-            // Download automatically for testing
-            const file = new File(
-                [audioBlob],
-                "test.webm",
+            const audioBlob = new Blob(
+                audioChunks,
                 {
-                    type: "audio/webm"
+                    type: mimeType
                 }
             );
 
-            const link = document.createElement("a");
+            console.log(
+                "Blob:",
+                audioBlob
+            );
 
-            link.href = URL.createObjectURL(file);
+            console.log(
+                "Blob Type:",
+                audioBlob.type
+            );
 
-            link.download = "test.webm";
+            console.log(
+                "Blob Size:",
+                audioBlob.size
+            );
 
-            document.body.appendChild(link);
+            const audioURL =
+                URL.createObjectURL(audioBlob);
 
-            link.click();
+            console.log(
+                "Generated URL:",
+                audioURL
+            );
 
-            document.body.removeChild(link);
+            if (stream) {
 
-            // Stop microphone
-            stream.getTracks().forEach(track => track.stop());
+                stream
+                    .getTracks()
+                    .forEach(track => track.stop());
+
+            }
 
             resolve({
 

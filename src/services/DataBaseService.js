@@ -154,3 +154,71 @@ export async function getRecordingById(id) {
     });
 
 }
+
+export async function updateRecording(recording) {
+
+    const db = await openDatabase();
+
+    return new Promise((resolve, reject) => {
+
+        const transaction = db.transaction(
+
+            STORE_NAME,
+
+            "readwrite"
+
+        );
+
+        const store = transaction.objectStore(STORE_NAME);
+
+        const request = store.put(recording);
+
+        request.onsuccess = function () {
+
+            resolve();
+
+        };
+
+        request.onerror = function () {
+
+            reject(request.error);
+
+        };
+
+    });
+
+}
+
+export async function deleteRecording(id) {
+
+    const db = await openDatabase();
+
+    return new Promise((resolve, reject) => {
+
+        const transaction = db.transaction(
+
+            STORE_NAME,
+
+            "readwrite"
+
+        );
+
+        const store = transaction.objectStore(STORE_NAME);
+
+        const request = store.delete(id);
+
+        request.onsuccess = function () {
+
+            resolve();
+
+        };
+
+        request.onerror = function () {
+
+            reject(request.error);
+
+        };
+
+    });
+
+}

@@ -1,52 +1,51 @@
-import "../styles/Home.css";
 import { useNavigate } from "react-router-dom";
 
 import Logo from "../components/common/Logo";
 import Button from "../components/common/Button";
 import Card from "../components/common/Card";
 
-import "../styles/Home.css";
-
 function Home() {
 
     const navigate = useNavigate();
-
-    function startRecording() {
-        navigate("/recording");
-    }
-
-    function openRecordings() {
-        navigate("/recordings");
-    }
-
-    function openSettings() {
-        navigate("/settings");
-    }
 
     return (
 
         <div className="page-container home-page">
 
+            <Logo />
+
+            <div className="home-buttons">
+
+                <Button
+                    text="🎙 Start Recording"
+                    onClick={() => navigate("/recording")}
+                />
+
+                <Button
+                    text="📂 My Recordings"
+                    onClick={() => navigate("/recordings")}
+                />
+
+                <Button
+                    text="⚙ Settings"
+                    onClick={() => navigate("/settings")}
+                />
+
+            </div>
+
             <Card>
 
-                <Logo />
+                <h3>✨ VoiceNest Features</h3>
 
-                <div className="home-buttons">
+                <div className="feature-list">
 
-                    <Button
-                        text="🎤 Start Recording"
-                        onClick={startRecording}
-                    />
+                    <p>🔒 End-to-End Encryption</p>
 
-                    <Button
-                        text="📁 My Recordings"
-                        onClick={openRecordings}
-                    />
+                    <p>🎯 Private Cloud Storage</p>
 
-                    <Button
-                        text="⚙️ Settings"
-                        onClick={openSettings}
-                    />
+                    <p>🤖 AI Speech Transcription</p>
+
+                    <p>👥 Secure Sharing</p>
 
                 </div>
 

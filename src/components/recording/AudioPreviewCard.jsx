@@ -6,25 +6,20 @@ function AudioPreviewCard({ duration, audioURL }) {
 
         <Card>
 
-            <h2>▶ Audio Preview</h2>
+            <h3>🎵 Preview</h3>
 
-            {audioURL && (
-
-                <audio
-                    controls
-                    src={audioURL}
-                    preload="metadata"
-                    style={{
-                        width: "100%",
-                        margin: "15px 0"
-                    }}
-                />
-
-            )}
+            <audio
+                controls
+                src={audioURL}
+                style={{
+                    width:"100%",
+                    margin:"20px 0"
+                }}
+            />
 
             <p>
 
-                Duration : {duration}
+                ⏱ Duration : <strong>{duration}</strong>
 
             </p>
 

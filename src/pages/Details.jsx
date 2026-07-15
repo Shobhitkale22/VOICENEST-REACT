@@ -8,6 +8,10 @@ import RecordingInfo from "../components/details/RecordingInfo";
 import AudioPlayer from "../components/details/AudioPlayer";
 import FeatureButton from "../components/details/FeatureButton";
 
+import {
+    getRecordingById
+} from "../services/databaseService";
+
 function Details() {
 
     const navigate = useNavigate();
@@ -16,21 +20,58 @@ function Details() {
 
     const [recording, setRecording] = useState(null);
 
+    const [audioURL, setAudioURL] = useState("");
+
     useEffect(() => {
 
-        const savedRecordings = JSON.parse(
+        async function loadRecording() {
 
-            localStorage.getItem("recordings")
+            try {
 
-        ) || [];
+                const selectedRecording =
+                    await getRecordingById(Number(id));
 
-        const selectedRecording = savedRecordings.find(
+                if (!selectedRecording) {
 
-            (item) => String(item.id) === id
+                    return;
 
-        );
+                }
 
-        setRecording(selectedRecording);
+                setRecording(selectedRecording);
+
+                if (selectedRecording.audioBlob) {
+
+                    const url = URL.createObjectURL(
+
+                        selectedRecording.audioBlob
+
+                    );
+
+                    setAudioURL(url);
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+            }
+
+        }
+
+        loadRecording();
+
+        return () => {
+
+            if (audioURL) {
+
+                URL.revokeObjectURL(audioURL);
+
+            }
+
+        };
 
     }, [id]);
 
@@ -52,7 +93,7 @@ function Details() {
 
                     text="⬅ Back"
 
-                    onClick={() => navigate("/my-recordings")}
+                    onClick={() => navigate("/recordings")}
 
                 />
 
@@ -90,7 +131,7 @@ function Details() {
 
             <RecordingInfo
 
-                title={recording.title}
+                title={recording.title || "Untitled Recording"}
 
                 duration={recording.duration}
 
@@ -100,7 +141,7 @@ function Details() {
 
             <AudioPlayer
 
-                audioURL={recording.audioURL}
+                audioURL={audioURL}
 
             />
 
