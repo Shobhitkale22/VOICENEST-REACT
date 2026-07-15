@@ -77,3 +77,47 @@ button:disabled{
     cursor:not-allowed;
 
 }
+
+.save-buttons{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+
+    margin-top:20px;
+
+}
+
+.save-btn{
+
+    background:linear-gradient(
+
+        135deg,
+
+        #4a90e2,
+
+        #3578e5
+
+    );
+
+}
+
+.save-btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.discard-btn{
+
+    background:#ff4d4f;
+
+}
+
+.discard-btn:hover{
+
+    background:#d9363e;
+
+}

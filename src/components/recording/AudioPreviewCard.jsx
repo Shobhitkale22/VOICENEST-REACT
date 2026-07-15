@@ -1,25 +1,42 @@
 import Card from "../common/Card";
 
-function AudioPreviewCard({ duration, audioURL }) {
+function AudioPreviewCard({
+
+    duration,
+
+    audioURL
+
+}) {
 
     return (
 
-        <Card>
+        <Card className="audio-preview-card">
 
-            <h3>🎵 Preview</h3>
+            <h2>
 
-            <audio
-                controls
-                src={audioURL}
-                style={{
-                    width:"100%",
-                    margin:"20px 0"
-                }}
-            />
+                ▶ Audio Preview
+
+            </h2>
+
+            {
+
+                audioURL &&
+
+                <audio
+
+                    controls
+
+                    preload="metadata"
+
+                    src={audioURL}
+
+                />
+
+            }
 
             <p>
 
-                ⏱ Duration : <strong>{duration}</strong>
+                Duration : {duration}
 
             </p>
 

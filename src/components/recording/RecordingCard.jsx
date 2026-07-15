@@ -23,41 +23,53 @@ function RecordingCard({
 
         <Card>
 
-            <h3>{title}</h3>
+            <div className="recording-card">
 
-            <p>⏱ Duration : {duration}</p>
+                <div className="recording-info">
 
-            <p>📅 {createdAt}</p>
+                    <h3>
 
-            <div
-                style={{
+                        🎤 {title || "Untitled Recording"}
 
-                    display: "flex",
+                    </h3>
 
-                    flexDirection: "column",
+                    <div className="recording-meta">
 
-                    gap: "10px",
+                        <span>
 
-                    marginTop: "20px"
+                            ⏱ {duration}
 
-                }}
-            >
+                        </span>
 
-                <Button
+                        <span>
 
-                    text="👁 View"
+                            📅 {createdAt}
 
-                    onClick={() => navigate(`/details/${id}`)}
+                        </span>
 
-                />
+                    </div>
 
-                <Button
+                </div>
 
-                    text="🗑 Delete"
+                <div className="recording-actions">
 
-                    onClick={() => onDelete(id)}
+                    <Button
 
-                />
+                        text="▶ View Details"
+
+                        onClick={() => navigate(`/details/${id}`)}
+
+                    />
+
+                    <Button
+
+                        text="🗑 Delete"
+
+                        onClick={() => onDelete(id)}
+
+                    />
+
+                </div>
 
             </div>
 

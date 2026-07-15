@@ -1,6 +1,12 @@
 import Logo from "./Logo";
 
-function PageHeader({ title, subtitle }) {
+function PageHeader({
+
+    title,
+
+    subtitle
+
+}) {
 
     return (
 
@@ -8,13 +14,27 @@ function PageHeader({ title, subtitle }) {
 
             <Logo />
 
-            <h2>{title}</h2>
+            <div className="page-header-content">
 
-            {subtitle && (
+                <h2>
 
-                <p>{subtitle}</p>
+                    {title}
 
-            )}
+                </h2>
+
+                {
+
+                    subtitle &&
+
+                    <p>
+
+                        {subtitle}
+
+                    </p>
+
+                }
+
+            </div>
 
         </div>
 

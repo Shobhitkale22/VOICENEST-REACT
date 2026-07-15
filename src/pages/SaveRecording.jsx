@@ -136,41 +136,43 @@ function SaveRecording() {
 
     }
 
-    return (
+return (
 
-        <div className="page-container" save-page>
+    <div className="page-container save-recording-page">
 
-            <Logo />
+        <Logo />
 
-            <h2 className="save-title">
-    ✅ Recording Complete
-</h2>
+        <h2 className="save-title">
 
-<p className="save-subtitle">
-    Give your recording a meaningful name before saving.
-</p>
+            ✅ Recording Complete
 
-            <AudioPreviewCard
+        </h2>
 
-                duration={recording?.duration || "00:00"}
+        <AudioPreviewCard
 
-                audioURL={audioURL}
+            duration={recording?.duration || "00:00"}
 
-            />
+            audioURL={audioURL}
 
-            <RecordingNameCard
+        />
 
-                value={recordingName}
+        <RecordingNameCard
 
-                onChange={handleNameChange}
+            value={recordingName}
 
-            />
+            onChange={handleNameChange}
 
-            <EncryptionCard />
+        />
+
+        <EncryptionCard />
+
+        <div className="save-buttons">
 
             <Button
 
                 text="💾 Save Recording"
+
+                className="save-btn"
 
                 onClick={saveRecording}
 
@@ -180,13 +182,17 @@ function SaveRecording() {
 
                 text="🗑 Discard Recording"
 
+                className="discard-btn"
+
                 onClick={discardRecording}
 
             />
 
         </div>
 
-    );
+    </div>
+
+);
 
 }
 

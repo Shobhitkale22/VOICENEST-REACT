@@ -10,19 +10,23 @@ function SearchBar({
 
     return (
 
-        <input
+        <div className="search-wrapper">
 
-            className="search-bar"
+            <input
 
-            type="text"
+                className="search-bar"
 
-            value={value}
+                type="text"
 
-            onChange={onChange}
+                value={value}
 
-            placeholder={placeholder}
+                onChange={onChange}
 
-        />
+                placeholder={placeholder}
+
+            />
+
+        </div>
 
     );
 
