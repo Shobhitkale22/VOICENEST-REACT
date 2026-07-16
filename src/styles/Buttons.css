@@ -121,3 +121,39 @@ button:disabled{
     background:#d9363e;
 
 }
+
+.feature-btn{
+
+    width:100%;
+
+    border:none;
+
+    background:white;
+
+    padding:18px;
+
+    border-radius:16px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+    transition:.3s;
+
+}
+
+.feature-btn:hover{
+
+    transform:translateY(-2px);
+
+}
