@@ -94,7 +94,7 @@ function MyRecordings() {
 
             <PageHeader
 
-                title="📂 My Recordings"
+                title=" My Recordings"
 
                 subtitle="Manage all your saved recordings"
 
@@ -110,7 +110,7 @@ function MyRecordings() {
 
                 }
 
-                placeholder="🔍 Search recordings..."
+                placeholder=" Search recordings..."
 
             />
 
@@ -166,7 +166,7 @@ function MyRecordings() {
 
                 <Button
 
-                    text="➕ New Recording"
+                    text=" New Recording"
 
                     onClick={() =>
 

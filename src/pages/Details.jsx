@@ -149,7 +149,7 @@ function Details() {
 
                 text="View Transcript"
 
-                icon="📄"
+                icon=""
 
                 onClick={() => comingSoon("Transcript")}
 
@@ -159,7 +159,7 @@ function Details() {
 
                 text="Upload to Private Cloud"
 
-                icon="☁"
+                icon=""
 
                 onClick={() => comingSoon("Private Cloud")}
 
@@ -169,7 +169,7 @@ function Details() {
 
                 text="Share with VoiceNest User"
 
-                icon="👥"
+                icon=""
 
                 onClick={() => comingSoon("Sharing")}
 

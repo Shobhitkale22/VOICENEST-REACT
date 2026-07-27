@@ -17,17 +17,17 @@ function Home() {
             <div className="home-buttons">
 
                 <Button
-                    text="🎙 Start Recording"
+                    text=" Start Recording"
                     onClick={() => navigate("/recording")}
                 />
 
                 <Button
-                    text="📂 My Recordings"
+                    text=" My Recordings"
                     onClick={() => navigate("/recordings")}
                 />
 
                 <Button
-                    text="⚙ Settings"
+                    text=" Settings"
                     onClick={() => navigate("/settings")}
                 />
 
@@ -35,17 +35,17 @@ function Home() {
 
             <Card>
 
-                <h3>✨ VoiceNest Features</h3>
+                <h3> VoiceNest Features</h3>
 
                 <div className="feature-list">
 
-                    <p>🔒 End-to-End Encryption</p>
+                    <p> End-to-End Encryption</p>
 
-                    <p>🎯 Private Cloud Storage</p>
+                    <p> Private Cloud Storage</p>
 
-                    <p>🤖 AI Speech Transcription</p>
+                    <p> AI Speech Transcription</p>
 
-                    <p>👥 Secure Sharing</p>
+                    <p> Secure Sharing</p>
 
                 </div>
 

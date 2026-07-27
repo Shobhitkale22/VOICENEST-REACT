@@ -145,13 +145,13 @@ function Recording() {
 
             <Button
 
-                text="⏸ Pause Recording"
+                text=" Pause Recording"
                 disabled
             />
 
             <Button
 
-                text="⏹ Stop Recording"
+                text=" Stop Recording"
                 variant="danger"
                 onClick={handleStopRecording}
 
@@ -159,7 +159,7 @@ function Recording() {
 
             <SecurityCard
 
-                title="🔒 Secure Recording"
+                title=" Secure Recording"
 
                 message="Your recording is being encrypted."
 
