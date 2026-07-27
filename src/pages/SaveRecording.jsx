@@ -144,7 +144,7 @@ return (
 
         <h2 className="save-title">
 
-            ✅ Recording Complete
+             Recording Complete
 
         </h2>
 
@@ -170,7 +170,7 @@ return (
 
             <Button
 
-                text="💾 Save Recording"
+                text=" Save Recording"
 
                 className="save-btn"
 
@@ -180,7 +180,7 @@ return (
 
             <Button
 
-                text="🗑 Discard Recording"
+                text="Discard Recording"
 
                 className="discard-btn"
 
