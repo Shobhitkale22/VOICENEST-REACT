@@ -1,3 +1,4 @@
+import { loadWhisperModel } from "../ai/modelLoader";
 import { useNavigate } from "react-router-dom";
 
 import Logo from "../components/common/Logo";
@@ -30,6 +31,13 @@ function Home() {
                     text=" Settings"
                     onClick={() => navigate("/settings")}
                 />
+                <Button
+
+    text=" Test AI"
+
+    onClick={testAI}
+
+/>
 
             </div>
 
@@ -54,6 +62,26 @@ function Home() {
         </div>
 
     );
+
+}
+
+async function testAI() {
+
+    try {
+
+        await loadWhisperModel();
+
+        alert("Whisper Loaded Successfully!");
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert("Failed to load Whisper!");
+
+    }
 
 }
 
