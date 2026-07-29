@@ -1,3 +1,10 @@
+import { useEffect } from "react";
+
+import {
+
+    checkBackendHealth
+
+} from "../services/apiService";
 import { loadWhisperModel } from "../ai/modelLoader";
 import { useNavigate } from "react-router-dom";
 
@@ -6,6 +13,43 @@ import Button from "../components/common/Button";
 import Card from "../components/common/Card";
 
 function Home() {
+    useEffect(() => {
+
+    async function testBackend() {
+
+        try {
+
+            const result =
+
+                await checkBackendHealth();
+
+            console.log(
+
+                "Backend Connected:",
+
+                result
+
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+
+                "Backend Error:",
+
+                error
+
+            );
+
+        }
+
+    }
+
+    testBackend();
+
+}, []);
 
     const navigate = useNavigate();
 

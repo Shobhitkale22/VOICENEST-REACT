@@ -103,12 +103,25 @@ function Details() {
 
     }
 
-    function comingSoon(feature) {
+   function viewTranscript() {
 
-        alert(feature + " feature coming soon!");
+    if (
+
+        recording?.transcript
+
+    ) {
+
+        alert(recording.transcript);
 
     }
 
+    else {
+
+        alert("Transcript not available.");
+
+    }
+
+}
     return (
 
         <div className="page-container">
@@ -145,15 +158,15 @@ function Details() {
 
             />
 
-            <FeatureButton
+           <FeatureButton
 
-                text="View Transcript"
+    text="View Transcript"
 
-                icon=""
+    icon="📄"
 
-                onClick={() => comingSoon("Transcript")}
+    onClick={viewTranscript}
 
-            />
+/>
 
             <FeatureButton
 

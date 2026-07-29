@@ -14,6 +14,10 @@ import {
     updateRecording
 } from "../services/databaseService";
 
+import {
+    uploadRecording
+} from "../services/apiService";
+
 function SaveRecording() {
 
     const navigate = useNavigate();
@@ -100,21 +104,33 @@ function SaveRecording() {
 
     }
 
-    async function saveRecording() {
+   async function saveRecording() {
 
-        if (recordingName.trim() === "") {
+    if (recordingName.trim() === "") {
 
-            alert("Please enter a recording name.");
+        alert("Please enter a recording name.");
 
-            return;
+        return;
 
-        }
+    }
+
+    try {
+
+        const uploadResponse = await uploadRecording(
+
+            recording.audioBlob
+
+        );
+
+        console.log("Upload Response:", uploadResponse);
 
         const updatedRecording = {
 
             ...recording,
 
-            title: recordingName
+            title: recordingName,
+
+            transcript: uploadResponse.transcript
 
         };
 
@@ -126,6 +142,15 @@ function SaveRecording() {
 
     }
 
+    catch (error) {
+
+        console.error(error);
+
+        alert("Failed to save recording.");
+
+    }
+
+}
     function discardRecording() {
 
         if (window.confirm("Discard this recording?")) {
@@ -136,63 +161,63 @@ function SaveRecording() {
 
     }
 
-return (
+    return (
 
-    <div className="page-container save-recording-page">
+        <div className="page-container save-recording-page">
 
-        <Logo />
+            <Logo />
 
-        <h2 className="save-title">
+            <h2 className="save-title">
 
-             Recording Complete
+                Recording Complete
 
-        </h2>
+            </h2>
 
-        <AudioPreviewCard
+            <AudioPreviewCard
 
-            duration={recording?.duration || "00:00"}
+                duration={recording?.duration || "00:00"}
 
-            audioURL={audioURL}
-
-        />
-
-        <RecordingNameCard
-
-            value={recordingName}
-
-            onChange={handleNameChange}
-
-        />
-
-        <EncryptionCard />
-
-        <div className="save-buttons">
-
-            <Button
-
-                text=" Save Recording"
-
-                className="save-btn"
-
-                onClick={saveRecording}
+                audioURL={audioURL}
 
             />
 
-            <Button
+            <RecordingNameCard
 
-                text="Discard Recording"
+                value={recordingName}
 
-                className="discard-btn"
-
-                onClick={discardRecording}
+                onChange={handleNameChange}
 
             />
+
+            <EncryptionCard />
+
+            <div className="save-buttons">
+
+                <Button
+
+                    text="Save Recording"
+
+                    className="save-btn"
+
+                    onClick={saveRecording}
+
+                />
+
+                <Button
+
+                    text="Discard Recording"
+
+                    className="discard-btn"
+
+                    onClick={discardRecording}
+
+                />
+
+            </div>
 
         </div>
 
-    </div>
-
-);
+    );
 
 }
 
