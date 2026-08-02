@@ -15,8 +15,8 @@ import {
 } from "../services/databaseService";
 
 import {
-    uploadRecording
-} from "../services/apiService";
+    decryptBlob
+} from "../services/encryptionService";
 
 function SaveRecording() {
 
@@ -52,9 +52,6 @@ function SaveRecording() {
 
                 console.log("========== INDEXED DB ==========");
                 console.log("Recording:", data);
-                console.log("Audio Blob:", data?.audioBlob);
-                console.log("Blob Type:", data?.audioBlob?.type);
-                console.log("Blob Size:", data?.audioBlob?.size);
 
                 if (!data) {
 
@@ -64,11 +61,25 @@ function SaveRecording() {
 
                 }
 
+                const decryptedBlob = await decryptBlob(
+
+                    data.encryptedBlob,
+
+                    data.key,
+
+                    data.iv
+
+                );
+
+                console.log("========== AES DECRYPTION ==========");
+                console.log("Encrypted Blob:", data.encryptedBlob);
+                console.log("Decrypted Blob:", decryptedBlob);
+
                 setRecording(data);
 
                 setRecordingName(data.title || "");
 
-                url = URL.createObjectURL(data.audioBlob);
+                url = URL.createObjectURL(decryptedBlob);
 
                 console.log("Generated Blob URL:", url);
 
@@ -104,53 +115,44 @@ function SaveRecording() {
 
     }
 
-   async function saveRecording() {
+    async function saveRecording() {
 
-    if (recordingName.trim() === "") {
+        if (recordingName.trim() === "") {
 
-        alert("Please enter a recording name.");
+            alert("Please enter a recording name.");
 
-        return;
+            return;
 
-    }
+        }
 
-    try {
+        try {
 
-        const uploadResponse = await uploadRecording(
+            const updatedRecording = {
 
-            recording.audioBlob
+                ...recording,
 
-        );
+                title: recordingName
 
-        console.log("Upload Response:", uploadResponse);
+            };
 
-        const updatedRecording = {
+            await updateRecording(updatedRecording);
 
-            ...recording,
+            alert("Recording Saved Successfully!");
 
-            title: recordingName,
+            navigate("/recordings");
 
-            transcript: uploadResponse.transcript
+        }
 
-        };
+        catch (error) {
 
-        await updateRecording(updatedRecording);
+            console.error(error);
 
-        alert("Recording Saved Successfully!");
+            alert("Failed to save recording.");
 
-        navigate("/recordings");
-
-    }
-
-    catch (error) {
-
-        console.error(error);
-
-        alert("Failed to save recording.");
+        }
 
     }
 
-}
     function discardRecording() {
 
         if (window.confirm("Discard this recording?")) {

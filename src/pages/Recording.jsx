@@ -18,6 +18,15 @@ import {
     saveRecording as saveRecordingToDB
 } from "../services/databaseService";
 
+import {
+    uploadRecording
+} from "../services/apiService";
+
+import {
+    generateAESKey,
+    encryptBlob
+} from "../services/encryptionService";
+
 function Recording() {
 
     const navigate = useNavigate();
@@ -67,15 +76,18 @@ function Recording() {
     }, [navigate]);
 
     const minutes = String(
+
         Math.floor(seconds / 60)
+
     ).padStart(2, "0");
 
     const remainingSeconds = String(
+
         seconds % 60
+
     ).padStart(2, "0");
 
-    const formattedTime =
-        `${minutes}:${remainingSeconds}`;
+    const formattedTime = `${minutes}:${remainingSeconds}`;
 
     async function handleStopRecording() {
 
@@ -83,7 +95,49 @@ function Recording() {
 
         try {
 
+            // Stop Recording
+
             const audio = await stopRecording();
+
+            console.log("Recording Finished");
+
+            // Upload Original Audio to Backend
+
+            console.log("Uploading to Whisper...");
+
+            const uploadResponse = await uploadRecording(
+
+                audio.blob
+
+            );
+
+            console.log("Transcript Generated:");
+
+            console.log(uploadResponse.transcript);
+
+            // Generate AES Key
+
+            const key = await generateAESKey();
+
+            console.log("AES Key Generated");
+
+            // Encrypt Audio
+
+            const {
+
+                encryptedBlob,
+
+                iv
+
+            } = await encryptBlob(
+
+                audio.blob,
+
+                key
+
+            );
+
+            console.log("Audio Encrypted Successfully");
 
             const recordingId = Date.now();
 
@@ -97,17 +151,33 @@ function Recording() {
 
                 createdAt: new Date().toLocaleString(),
 
-                audioBlob: audio.blob
+                transcript: uploadResponse.transcript,
+
+                encryptedBlob,
+
+                iv,
+
+                key
 
             };
 
             await saveRecordingToDB(recording);
 
+            console.log("========== AES ENCRYPTION ==========");
+
+            console.log("Encrypted Blob:", encryptedBlob);
+
+            console.log("IV:", iv);
+
+            console.log("AES Key:", key);
+
+            console.log("Recording Saved To IndexedDB");
+
             navigate("/save", {
 
                 state: {
 
-                    recordingId: recordingId
+                    recordingId
 
                 }
 
@@ -146,13 +216,17 @@ function Recording() {
             <Button
 
                 text=" Pause Recording"
+
                 disabled
+
             />
 
             <Button
 
                 text=" Stop Recording"
+
                 variant="danger"
+
                 onClick={handleStopRecording}
 
             />

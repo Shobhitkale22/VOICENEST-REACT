@@ -1,3 +1,11 @@
+import {
+    generateAESKey,
+    encryptBlob,
+    decryptBlob
+} from "../services/encryptionService";
+
+
+
 import { useEffect } from "react";
 
 import {
@@ -75,11 +83,11 @@ function Home() {
                     text=" Settings"
                     onClick={() => navigate("/settings")}
                 />
-                <Button
+             <Button
 
-    text=" Test AI"
+    text="Test Encryption"
 
-    onClick={testAI}
+    onClick={testEncryption}
 
 />
 
@@ -124,6 +132,104 @@ async function testAI() {
         console.error(error);
 
         alert("Failed to load Whisper!");
+
+    }
+
+}
+
+async function testEncryption() {
+
+    try {
+
+        // Create Dummy Audio
+
+        const originalBlob = new Blob(
+
+            ["Hello VoiceNest"],
+
+            {
+                type: "text/plain"
+            }
+
+        );
+
+        console.log("Original Blob:", originalBlob);
+
+        // Generate AES Key
+
+        const key = await generateAESKey();
+
+        console.log("AES Key:", key);
+
+        // Encrypt
+
+        const {
+
+            encryptedBlob,
+
+            iv
+
+        } = await encryptBlob(
+
+            originalBlob,
+
+            key
+
+        );
+
+        console.log(
+
+            "Encrypted Blob:",
+
+            encryptedBlob
+
+        );
+
+        // Decrypt
+
+        const decryptedBlob =
+
+            await decryptBlob(
+
+                encryptedBlob,
+
+                key,
+
+                iv
+
+            );
+
+        console.log(
+
+            "Decrypted Blob:",
+
+            decryptedBlob
+
+        );
+
+        const text =
+
+            await decryptedBlob.text();
+
+        console.log(
+
+            "Recovered Text:",
+
+            text
+
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+
+            "Encryption Test Failed:",
+
+            error
+
+        );
 
     }
 
