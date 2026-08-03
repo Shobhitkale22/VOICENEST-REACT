@@ -1,0 +1,59 @@
+.signup-page {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+
+}
+
+.signup-title {
+
+    text-align: center;
+
+    font-size: 30px;
+
+    color: #1f2937;
+
+    margin-top: 10px;
+
+}
+
+.signup-subtitle {
+
+    text-align: center;
+
+    color: #6b7280;
+
+    line-height: 1.5;
+
+    margin-bottom: 20px;
+
+}
+
+.login-link {
+
+    text-align: center;
+
+    color: #6b7280;
+
+}
+
+.login-link a {
+
+    color: #2563eb;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+    margin-left: 6px;
+
+}
+
+.login-link a:hover {
+
+    text-decoration: underline;
+
+}

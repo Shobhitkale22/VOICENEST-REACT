@@ -1,40 +1,105 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Profile from "./pages/Profile";
+
 import Home from "./pages/Home";
 import Recording from "./pages/Recording";
 import SaveRecording from "./pages/SaveRecording";
 import MyRecordings from "./pages/MyRecordings";
 import Details from "./pages/Details";
 import Settings from "./pages/Settings";
-import UseRefDemo from "./pages/UseRefDemo";
-import CounterDemo from "./pages/CounterDemo";
 
 function App() {
+
     return (
+
         <BrowserRouter>
 
             <Routes>
 
-                <Route path="/" element={<Home />} />
+                {/* Authentication */}
 
-                <Route path="/recording" element={<Recording />} />
+                <Route
 
-                <Route path="/save" element={<SaveRecording />} />
+                    path="/"
 
-                <Route path="/recordings" element={<MyRecordings />} />
+                    element={<Login />}
 
-                <Route path="/details/:id" element={<Details />} />
+                />
 
-                <Route path="/settings" element={<Settings />} />
+                <Route
 
-                <Route path="/useref" element={<UseRefDemo />} />
+                    path="/signup"
 
-                <Route path="/counter" element={<CounterDemo />} />
+                    element={<Signup />}
+
+                />
+                <Route
+
+    path="/profile"
+
+    element={<Profile />}
+
+/>
+
+                {/* VoiceNest */}
+
+                <Route
+
+                    path="/home"
+
+                    element={<Home />}
+
+                />
+
+                <Route
+
+                    path="/recording"
+
+                    element={<Recording />}
+
+                />
+
+                <Route
+
+                    path="/save"
+
+                    element={<SaveRecording />}
+
+                />
+
+                <Route
+
+                    path="/recordings"
+
+                    element={<MyRecordings />}
+
+                />
+
+                <Route
+
+                    path="/details"
+
+                    element={<Details />}
+
+                />
+
+                <Route
+
+                    path="/settings"
+
+                    element={<Settings />}
+
+                />
 
             </Routes>
 
         </BrowserRouter>
+
     );
+
 }
 
 export default App;
