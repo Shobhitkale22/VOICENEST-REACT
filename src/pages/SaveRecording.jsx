@@ -18,6 +18,10 @@ import {
     decryptBlob
 } from "../services/encryptionService";
 
+import {
+    uploadCloudRecording
+} from "../services/cloudService";
+
 function SaveRecording() {
 
     const navigate = useNavigate();
@@ -153,6 +157,73 @@ function SaveRecording() {
 
     }
 
+    async function handleCloudUpload() {
+
+        if (!recording) {
+
+            return;
+
+        }
+
+        if (recordingName.trim() === "") {
+
+            alert("Please enter a recording name.");
+
+            return;
+
+        }
+
+        try {
+
+            const user = JSON.parse(
+
+                localStorage.getItem("user")
+
+            );
+
+            const cloudRecording = {
+
+                audioBlob: recording.encryptedBlob,
+
+                title: recordingName,
+
+                transcript: recording.transcript,
+
+                duration: recording.duration,
+
+                userId: user.id
+
+            };
+
+            console.log("========== PRIVATE CLOUD ==========");
+            console.log(cloudRecording);
+
+            const response = await uploadCloudRecording(
+
+                cloudRecording
+
+            );
+
+            console.log(response);
+
+            alert(
+
+                "Recording uploaded to Private Cloud successfully."
+
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            alert(error.message);
+
+        }
+
+    }
+
     function discardRecording() {
 
         if (window.confirm("Discard this recording?")) {
@@ -202,6 +273,14 @@ function SaveRecording() {
                     className="save-btn"
 
                     onClick={saveRecording}
+
+                />
+
+                <Button
+
+                    text="Upload To Private Cloud"
+
+                    onClick={handleCloudUpload}
 
                 />
 

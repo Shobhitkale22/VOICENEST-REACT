@@ -84,7 +84,7 @@ function Login() {
 
             <h2 className="login-title">
 
-                Welcome Back 👋
+                Welcome Back 
 
             </h2>
 
@@ -96,7 +96,7 @@ function Login() {
 
             <InputCard
 
-                icon="📧"
+                icon=""
 
                 label="Email Address"
 
@@ -110,7 +110,7 @@ function Login() {
 
             <InputCard
 
-                icon="🔒"
+                icon=""
 
                 label="Password"
 

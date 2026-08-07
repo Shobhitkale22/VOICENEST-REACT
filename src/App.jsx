@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Profile from "./pages/Profile";
 
 import Home from "./pages/Home";
 import Recording from "./pages/Recording";
@@ -10,6 +9,12 @@ import SaveRecording from "./pages/SaveRecording";
 import MyRecordings from "./pages/MyRecordings";
 import Details from "./pages/Details";
 import Settings from "./pages/Settings";
+import Profile from "./pages/Profile";
+import CloudRecordings from "./pages/CloudRecordings";
+import SharedWithMe from "./pages/SharedWithMe";
+import CloudDetails from "./pages/CloudDetails";
+
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 function App() {
 
@@ -19,7 +24,7 @@ function App() {
 
             <Routes>
 
-                {/* Authentication */}
+                {/* Public Routes */}
 
                 <Route
 
@@ -36,21 +41,22 @@ function App() {
                     element={<Signup />}
 
                 />
-                <Route
 
-    path="/profile"
-
-    element={<Profile />}
-
-/>
-
-                {/* VoiceNest */}
+                {/* Protected Routes */}
 
                 <Route
 
                     path="/home"
 
-                    element={<Home />}
+                    element={
+
+                        <ProtectedRoute>
+
+                            <Home />
+
+                        </ProtectedRoute>
+
+                    }
 
                 />
 
@@ -58,7 +64,15 @@ function App() {
 
                     path="/recording"
 
-                    element={<Recording />}
+                    element={
+
+                        <ProtectedRoute>
+
+                            <Recording />
+
+                        </ProtectedRoute>
+
+                    }
 
                 />
 
@@ -66,7 +80,15 @@ function App() {
 
                     path="/save"
 
-                    element={<SaveRecording />}
+                    element={
+
+                        <ProtectedRoute>
+
+                            <SaveRecording />
+
+                        </ProtectedRoute>
+
+                    }
 
                 />
 
@@ -74,25 +96,112 @@ function App() {
 
                     path="/recordings"
 
-                    element={<MyRecordings />}
+                    element={
+
+                        <ProtectedRoute>
+
+                            <MyRecordings />
+
+                        </ProtectedRoute>
+
+                    }
 
                 />
 
-                <Route
+               <Route
 
-                    path="/details"
+    path="/details/:id"
 
-                    element={<Details />}
+    element={
 
-                />
+        <ProtectedRoute>
 
+            <Details />
+
+        </ProtectedRoute>
+
+    }
+
+/> 
                 <Route
 
                     path="/settings"
 
-                    element={<Settings />}
+                    element={
+
+                        <ProtectedRoute>
+
+                            <Settings />
+
+                        </ProtectedRoute>
+
+                    }
 
                 />
+
+                <Route
+
+                    path="/profile"
+
+                    element={
+
+                        <ProtectedRoute>
+
+                            <Profile />
+
+                        </ProtectedRoute>
+
+                    }
+
+                />
+
+                <Route
+
+    path="/cloud"
+
+    element={
+
+        <ProtectedRoute>
+
+            <CloudRecordings />
+
+        </ProtectedRoute>
+
+    }
+
+/>
+
+<Route
+
+    path="/shared"
+
+    element={
+
+        <ProtectedRoute>
+
+            <SharedWithMe />
+
+        </ProtectedRoute>
+
+    }
+
+/>
+
+<Route
+
+    path="/cloud-details/:id"
+
+    element={
+
+        <ProtectedRoute>
+
+            <CloudDetails />
+
+        </ProtectedRoute>
+
+    }
+
+/>
 
             </Routes>
 

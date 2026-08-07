@@ -1,79 +1,470 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+    useEffect,
+    useState
+} from "react";
 
-import PageHeader from "../components/common/PageHeader";
-import Button from "../components/common/Button";
+import {
+    useNavigate,
+    useParams
+} from "react-router-dom";
 
-import RecordingInfo from "../components/details/RecordingInfo";
-import AudioPlayer from "../components/details/AudioPlayer";
-import FeatureButton from "../components/details/FeatureButton";
+import PageHeader
+    from "../components/common/PageHeader";
+
+import Button
+    from "../components/common/Button";
+
+import RecordingInfo
+    from "../components/details/RecordingInfo";
+
+import AudioPlayer
+    from "../components/details/AudioPlayer";
+
+import FeatureButton
+    from "../components/details/FeatureButton";
+
 
 import {
     getRecordingById
 } from "../services/databaseService";
 
+
+import {
+    decryptBlob
+} from "../services/encryptionService";
+
+
+import {
+    uploadCloudRecording,
+    getCloudRecordings
+} from "../services/cloudService";
+
+
+import {
+    shareRecording
+} from "../services/shareService";
+
+
 function Details() {
 
-    const navigate = useNavigate();
+    const navigate =
+        useNavigate();
 
-    const { id } = useParams();
 
-    const [recording, setRecording] = useState(null);
+    const { id } =
+        useParams();
 
-    const [audioURL, setAudioURL] = useState("");
+
+    const [recording, setRecording] =
+        useState(null);
+
+
+    const [audioURL, setAudioURL] =
+        useState("");
+
 
     useEffect(() => {
+
+        let url = "";
+
 
         async function loadRecording() {
 
             try {
 
                 const selectedRecording =
-                    await getRecordingById(Number(id));
+                    await getRecordingById(
+                        Number(id)
+                    );
+
 
                 if (!selectedRecording) {
+
+                    alert(
+                        "Recording not found."
+                    );
+
+                    navigate(
+                        "/recordings"
+                    );
 
                     return;
 
                 }
 
-                setRecording(selectedRecording);
 
-                if (selectedRecording.audioBlob) {
+                const decryptedBlob =
+                    await decryptBlob(
 
-                    const url = URL.createObjectURL(
+                        selectedRecording.encryptedBlob,
 
-                        selectedRecording.audioBlob
+                        selectedRecording.key,
+
+                        selectedRecording.iv
 
                     );
 
-                    setAudioURL(url);
 
-                }
+                url =
+                    URL.createObjectURL(
+                        decryptedBlob
+                    );
+
+
+                setAudioURL(
+                    url
+                );
+
+
+                setRecording(
+                    selectedRecording
+                );
 
             }
 
             catch (error) {
 
-                console.error(error);
+                console.error(
+                    "Load Recording Error:",
+                    error
+                );
+
+                alert(
+                    "Unable to load recording."
+                );
 
             }
 
         }
 
+
         loadRecording();
+
 
         return () => {
 
-            if (audioURL) {
+            if (url) {
 
-                URL.revokeObjectURL(audioURL);
+                URL.revokeObjectURL(
+                    url
+                );
 
             }
 
         };
 
-    }, [id]);
+    }, [
+        id,
+        navigate
+    ]);
+
+
+    // ========================================
+    // UPLOAD TO CLOUD
+    // ========================================
+
+    async function uploadToCloud() {
+
+        try {
+
+            if (!recording) {
+
+                alert(
+                    "Recording is not loaded."
+                );
+
+                return;
+
+            }
+
+
+            const user =
+                JSON.parse(
+
+                    localStorage.getItem(
+                        "user"
+                    )
+
+                );
+
+
+            if (!user) {
+
+                alert(
+                    "User not found. Please login again."
+                );
+
+                return;
+
+            }
+
+
+            const cloudRecording = {
+
+                userId:
+                    user.id,
+
+                localRecordingId:
+                    recording.id,
+
+                title:
+                    recording.title || "",
+
+                duration:
+                    recording.duration || "",
+
+                transcript:
+                    recording.transcript || "",
+
+                encryptedBlob:
+                    recording.encryptedBlob,
+
+                // RAW AES KEY
+                key:
+                    recording.key,
+
+                // AES-GCM IV
+                iv:
+                    recording.iv
+
+            };
+
+
+            const response =
+                await uploadCloudRecording(
+                    cloudRecording
+                );
+
+
+            console.log(
+                "Cloud Upload Response:",
+                response
+            );
+
+
+            alert(
+                "Recording uploaded to Private Cloud successfully."
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Cloud Upload Error:",
+                error
+            );
+
+            alert(
+                "Cloud upload failed."
+            );
+
+        }
+
+    }
+
+
+    // ========================================
+    // SHARE RECORDING
+    // ========================================
+
+    async function shareRecordingWithUser() {
+
+        const receiverEmail =
+            prompt(
+                "Enter receiver's email"
+            );
+
+
+        if (
+            !receiverEmail ||
+            receiverEmail.trim() === ""
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            if (!recording) {
+
+                alert(
+                    "Recording is not loaded."
+                );
+
+                return;
+
+            }
+
+
+            const user =
+                JSON.parse(
+
+                    localStorage.getItem(
+                        "user"
+                    )
+
+                );
+
+
+            if (!user) {
+
+                alert(
+                    "User not found."
+                );
+
+                return;
+
+            }
+
+
+            // ========================================
+            // CHECK IF RECORDING IS ALREADY IN CLOUD
+            // ========================================
+
+            let cloudRecordings =
+                await getCloudRecordings(
+                    user.id
+                );
+
+
+            let cloudRecording =
+                cloudRecordings.find(
+
+                    (item) =>
+
+                        Number(
+                            item.localRecordingId
+                        ) ===
+                        Number(
+                            recording.id
+                        )
+
+                );
+
+
+            // ========================================
+            // IF NOT IN CLOUD → UPLOAD FIRST
+            // ========================================
+
+            if (!cloudRecording) {
+
+                const cloudUpload =
+                    await uploadCloudRecording({
+
+                        userId:
+                            user.id,
+
+                        localRecordingId:
+                            recording.id,
+
+                        title:
+                            recording.title || "",
+
+                        duration:
+                            recording.duration || "",
+
+                        transcript:
+                            recording.transcript || "",
+
+                        encryptedBlob:
+                            recording.encryptedBlob,
+
+                        key:
+                            recording.key,
+
+                        iv:
+                            recording.iv
+
+                    });
+
+
+                cloudRecording =
+                    cloudUpload.recording;
+
+            }
+
+
+            // ========================================
+            // NOW SHARE CLOUD RECORDING ID
+            // ========================================
+
+            const response =
+                await shareRecording({
+
+                    cloudRecordingId:
+                        cloudRecording.id,
+
+                    ownerId:
+                        user.id,
+
+                    receiverEmail:
+                        receiverEmail.trim()
+
+                });
+
+
+            console.log(
+                "Share Response:",
+                response
+            );
+
+
+            alert(
+                "Recording shared successfully."
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Sharing Error:",
+                error
+            );
+
+            alert(
+                "Sharing failed."
+            );
+
+        }
+
+    }
+
+
+    // ========================================
+    // TRANSCRIPT
+    // ========================================
+
+    function viewTranscript() {
+
+        if (
+            recording &&
+            recording.transcript
+        ) {
+
+            alert(
+                recording.transcript
+            );
+
+        }
+
+        else {
+
+            alert(
+                "Transcript not available."
+            );
+
+        }
+
+    }
+
+
+    // ========================================
+    // LOADING
+    // ========================================
 
     if (!recording) {
 
@@ -87,15 +478,9 @@ function Details() {
 
                 />
 
-                <p>Recording not found.</p>
-
-                <Button
-
-                    text="⬅ Back"
-
-                    onClick={() => navigate("/recordings")}
-
-                />
+                <p>
+                    Loading Recording...
+                </p>
 
             </div>
 
@@ -103,25 +488,7 @@ function Details() {
 
     }
 
-   function viewTranscript() {
 
-    if (
-
-        recording?.transcript
-
-    ) {
-
-        alert(recording.transcript);
-
-    }
-
-    else {
-
-        alert("Transcript not available.");
-
-    }
-
-}
     return (
 
         <div className="page-container">
@@ -130,61 +497,91 @@ function Details() {
 
                 title="Recording Details"
 
-                subtitle="View your recording"
+                subtitle={
+                    "Manage your secure recording"
+                }
 
             />
+
 
             <Button
 
                 text="⬅ Back"
 
-                onClick={() => navigate("/recordings")}
+                onClick={() =>
+                    navigate(
+                        "/recordings"
+                    )
+                }
 
             />
+
 
             <RecordingInfo
 
-                title={recording.title || "Untitled Recording"}
+                title={
 
-                duration={recording.duration}
+                    recording.title ||
 
-                createdAt={recording.createdAt}
+                    "Untitled Recording"
+
+                }
+
+                duration={
+                    recording.duration
+                }
+
+                createdAt={
+                    recording.createdAt
+                }
 
             />
+
 
             <AudioPlayer
 
-                audioURL={audioURL}
+                audioURL={
+                    audioURL
+                }
 
             />
 
-           <FeatureButton
-
-    text="View Transcript"
-
-    icon="📄"
-
-    onClick={viewTranscript}
-
-/>
 
             <FeatureButton
 
-                text="Upload to Private Cloud"
+                text="View Transcript"
 
-                icon=""
+                icon="📄"
 
-                onClick={() => comingSoon("Private Cloud")}
+                onClick={
+                    viewTranscript
+                }
 
             />
 
+
             <FeatureButton
 
-                text="Share with VoiceNest User"
+                text="Upload To Private Cloud"
 
-                icon=""
+                icon="☁"
 
-                onClick={() => comingSoon("Sharing")}
+                onClick={
+                    uploadToCloud
+                }
+
+            />
+
+
+            <FeatureButton
+
+                text="Share Recording"
+
+                icon="🤝"
+
+                onClick={
+                    shareRecordingWithUser
+                }
 
             />
 
@@ -193,5 +590,6 @@ function Details() {
     );
 
 }
+
 
 export default Details;

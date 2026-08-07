@@ -80,7 +80,7 @@ function Signup() {
 
             <h2 className="signup-title">
 
-                Create Your VoiceNest Account 🚀
+                Create Your VoiceNest Account 
 
             </h2>
 
@@ -92,7 +92,7 @@ function Signup() {
 
             <InputCard
 
-                icon="👤"
+                icon=""
 
                 label="Full Name"
 
@@ -106,7 +106,7 @@ function Signup() {
 
             <InputCard
 
-                icon="📧"
+                icon=""
 
                 label="Email Address"
 
@@ -120,7 +120,7 @@ function Signup() {
 
             <InputCard
 
-                icon="🔒"
+                icon=""
 
                 label="Password"
 
@@ -136,7 +136,7 @@ function Signup() {
 
             <InputCard
 
-                icon="🔒"
+                icon=""
 
                 label="Confirm Password"
 

@@ -4,6 +4,11 @@ const DATABASE_VERSION = 1;
 
 const STORE_NAME = "recordings";
 
+
+// ==========================================
+// OPEN DATABASE
+// ==========================================
+
 export function openDatabase() {
 
     return new Promise((resolve, reject) => {
@@ -20,16 +25,22 @@ export function openDatabase() {
 
             const db = event.target.result;
 
-            if (!db.objectStoreNames.contains(STORE_NAME)) {
+            if (
+
+                !db.objectStoreNames.contains(
+
+                    STORE_NAME
+
+                )
+
+            ) {
 
                 db.createObjectStore(
 
                     STORE_NAME,
 
                     {
-
                         keyPath: "id"
-
                     }
 
                 );
@@ -53,7 +64,39 @@ export function openDatabase() {
     });
 
 }
+
+
+// ==========================================
+// SAVE RECORDING
+// ==========================================
+
 export async function saveRecording(recording) {
+
+    if (!recording) {
+
+        throw new Error(
+
+            "Recording data is missing."
+
+        );
+
+    }
+
+    if (
+
+        recording.id === undefined ||
+
+        recording.id === null
+
+    ) {
+
+        throw new Error(
+
+            "Recording ID is missing."
+
+        );
+
+    }
 
     const db = await openDatabase();
 
@@ -67,13 +110,17 @@ export async function saveRecording(recording) {
 
         );
 
-        const store = transaction.objectStore(STORE_NAME);
+        const store = transaction.objectStore(
+
+            STORE_NAME
+
+        );
 
         const request = store.put(recording);
 
         request.onsuccess = function () {
 
-            resolve();
+            resolve(recording);
 
         };
 
@@ -86,6 +133,11 @@ export async function saveRecording(recording) {
     });
 
 }
+
+
+// ==========================================
+// GET ALL RECORDINGS
+// ==========================================
 
 export async function getAllRecordings() {
 
@@ -101,7 +153,11 @@ export async function getAllRecordings() {
 
         );
 
-        const store = transaction.objectStore(STORE_NAME);
+        const store = transaction.objectStore(
+
+            STORE_NAME
+
+        );
 
         const request = store.getAll();
 
@@ -121,7 +177,28 @@ export async function getAllRecordings() {
 
 }
 
+
+// ==========================================
+// GET RECORDING BY ID
+// ==========================================
+
 export async function getRecordingById(id) {
+
+    if (
+
+        id === undefined ||
+
+        id === null
+
+    ) {
+
+        throw new Error(
+
+            "Recording ID is required."
+
+        );
+
+    }
 
     const db = await openDatabase();
 
@@ -135,9 +212,17 @@ export async function getRecordingById(id) {
 
         );
 
-        const store = transaction.objectStore(STORE_NAME);
+        const store = transaction.objectStore(
 
-        const request = store.get(id);
+            STORE_NAME
+
+        );
+
+        const request = store.get(
+
+            Number(id)
+
+        );
 
         request.onsuccess = function () {
 
@@ -155,7 +240,46 @@ export async function getRecordingById(id) {
 
 }
 
+
+// ==========================================
+// UPDATE RECORDING
+// ==========================================
+
 export async function updateRecording(recording) {
+
+    if (!recording) {
+
+        throw new Error(
+
+            "Recording data is missing."
+
+        );
+
+    }
+
+    if (
+
+        recording.id === undefined ||
+
+        recording.id === null
+
+    ) {
+
+        console.error(
+
+            "Invalid recording passed to updateRecording:",
+
+            recording
+
+        );
+
+        throw new Error(
+
+            "Cannot update recording: ID is missing."
+
+        );
+
+    }
 
     const db = await openDatabase();
 
@@ -169,13 +293,17 @@ export async function updateRecording(recording) {
 
         );
 
-        const store = transaction.objectStore(STORE_NAME);
+        const store = transaction.objectStore(
+
+            STORE_NAME
+
+        );
 
         const request = store.put(recording);
 
         request.onsuccess = function () {
 
-            resolve();
+            resolve(recording);
 
         };
 
@@ -189,7 +317,28 @@ export async function updateRecording(recording) {
 
 }
 
+
+// ==========================================
+// DELETE RECORDING
+// ==========================================
+
 export async function deleteRecording(id) {
+
+    if (
+
+        id === undefined ||
+
+        id === null
+
+    ) {
+
+        throw new Error(
+
+            "Recording ID is required."
+
+        );
+
+    }
 
     const db = await openDatabase();
 
@@ -203,9 +352,17 @@ export async function deleteRecording(id) {
 
         );
 
-        const store = transaction.objectStore(STORE_NAME);
+        const store = transaction.objectStore(
 
-        const request = store.delete(id);
+            STORE_NAME
+
+        );
+
+        const request = store.delete(
+
+            Number(id)
+
+        );
 
         request.onsuccess = function () {
 

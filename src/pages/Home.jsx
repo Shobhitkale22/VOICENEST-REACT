@@ -83,13 +83,23 @@ function Home() {
                     text=" Settings"
                     onClick={() => navigate("/settings")}
                 />
-             <Button
 
-    text="Test Encryption"
+                <Button
 
-    onClick={testEncryption}
+    text=" My Cloud Recordings"
+
+    onClick={() => navigate("/cloud")}
 
 />
+
+<Button
+
+    text=" Shared With Me"
+
+    onClick={() => navigate("/shared")}
+
+/>
+         
 
             </div>
 
